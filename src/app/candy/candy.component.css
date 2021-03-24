@@ -1,0 +1,7 @@
+.try{
+    position: fixed;
+    background-color: aqua;
+    right: 50%;
+    width: 40px;
+    height: 40px;
+}

@@ -10,29 +10,57 @@
 
 
 
-  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton"class="select">
-    <input type="text" nz-input placeholder="input search text" />
-  </nz-input-group>
-  <ng-template #suffixIconButton>
-    <button nz-button nzType="primary" nzSearch ><i nz-icon nzType="search"></i></button>
-  </ng-template>
+
+
   
-  <nz-select nzPlaceHolder="Company" [(ngModel)]="selectedValue" >
-    <nz-option nzLabel="VS" nzValue="VS"></nz-option>
+
+  
+  
+  <!-- <nz-select nzPlaceHolder="Company" [(ngModel)]="selectedValue" >
+    <nz-option nzLabel="VS" nzValue="VS" ></nz-option>
     <nz-option nzLabel="CP" nzValue="CP"></nz-option>
-  </nz-select>
+  </nz-select> -->
 
-  <button nz-button nzType="default" (click)="addCandy()" class="bun"> Добавить пользователя </button>
 
+
+
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton"class="select">
+    <input type="text" nz-input placeholder="input search text"  [(ngModel)]="searchValue" />
+  </nz-input-group>
+    <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" >
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="search()" ><i nz-icon nzType="search"></i></button>
+      </ng-template>
+    </nz-filter-trigger>
+
+  
+  <div class="bunButton">
+  <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="selectedValue !== null" >
+    <nz-select nzPlaceHolder="Company" [(ngModel)]="selectedValue" (ngModelChange)="select()"  >
+      <nz-option nzLabel="VS" nzValue="VS" ></nz-option>
+      <nz-option nzLabel="CP" nzValue="CP" ></nz-option>
+    </nz-select>
+    <button nz-button nzSize="small" (click)="reset()">Reset</button>
+  </nz-filter-trigger>
+  </div>
+
+  <button nz-button nzType="default" (click)="showModal()" class="bun"> Добавить пользователя </button>
   <br />
   <br />
 
 
-  <nz-table #myTable [(nzData)]="mydata" nzTableLayout="fixed" nzShowPagination="false">
+
+
+  <nz-table #myTable 
+         nzShowSizeChanger
+         [(nzData)]="listOfDisplayData"
+         nzTableLayout="fixed" 
+         nzShowPagination="true">
     <thead>
       <tr>
+        <th nzCustomFilter [nzSortFn]="namecompare" [nzSortPriority]="namepriority" >Name </th>
         <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
-        <th [nzFilters]="filterCompany" [nzFilterFn]="filterfn">Company</th>
+        <th nzCustomFilter >Company</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -43,12 +71,50 @@
         <td>{{data.listened}}</td>
         <td>{{data.company}}</td>
         <td>
-            <a ><button nz-button nzType="default"> <i nz-icon nzType="edit" nzTheme="outline"></i></button></a>
-            <a ><button nz-button nzType="default" nzDanger > <i nz-icon nzType="delete" nzTheme="outline"></i></button></a>
+            <a ><button nz-button nzType="default" (click)="showModalTwo(data)" > <i nz-icon nzType="edit" nzTheme="outline"></i></button></a>
+            <a ><button nz-button nzType="default" (click)="deleteCandy(data.id)" nzDanger > <i nz-icon nzType="delete" nzTheme="outline"></i></button></a>
         </td>
       </tr>
     </tbody>
   </nz-table>
+
+
+
+
+
+
+
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Add Candy" (nzOnCancel)="handleCancel()" (nzOnOk)="addCandy(newName, newFile, newCompany)">
+    <ng-container *nzModalContent>
+      <p>bla-bla</p>
+      <input type="text" nz-input placeholder="input name"  [(ngModel)]="newName" /> <br><br>
+      <input type="text" nz-input placeholder="input file(!)"  [(ngModel)]="newFile" /> <br><br>
+      Listened = 0 <br><br>
+      <nz-radio-group [(ngModel)]="newCompany" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="VS">VS</label>
+        <label nz-radio-button nzValue="CP">CP</label>
+      </nz-radio-group> <br><br>
+
+      <!-- <button nz-button nzType="default" (click)="addCandy()" class="bun"> Добавить пользователя </button> -->
+    </ng-container>
+  </nz-modal>
+
+
+
+  <nz-modal [(nzVisible)]="isVisibleTwo" nzTitle="Edit Candy" (nzOnCancel)="handleCancel()" (nzOnOk)="editCandy(forEditId, newNameTwo, newFileTwo, forNoEditListened, newCompanyTwo)">
+    <ng-container *nzModalContent>
+      <p>bla-bla</p>
+      <input type="text" nz-input placeholder="input new name" [(ngModel)]="newNameTwo" /> <br><br>
+      <input type="text" nz-input placeholder="input new file(!)"  [(ngModel)]="newFileTwo" /> <br><br>
+      Listened = {{forNoEditListened}} <br><br>
+      <nz-radio-group [(ngModel)]="newCompanyTwo" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="VS">VS</label>
+        <label nz-radio-button nzValue="CP">CP</label>
+      </nz-radio-group> <br><br>
+
+    </ng-container>
+  </nz-modal>
+
 
 </body>
 </html>

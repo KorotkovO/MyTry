@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Welcome</title>
+  <base href="/candy">
+</head>
+<body>
+
+  <!-- <div class="try"> AAAA </div> -->
+
+  <div class="try">
+  <nz-filter-trigger  [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+    Текст
+    <i nz-icon nzType="search"></i>
+  </nz-filter-trigger>
+  </div>
+
+    <p>candy works!</p>
+
+
+      <nz-table #oh
+      nzShowSizeChanger
+      [nzData]="listOfCandy"
+      [nzFrontPagination]="true"
+      [nzLoading]="loading"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <th nzColumnKey="name" [nzSortFn]="true">Name</th>
+        <th nzColumnKey="file" [nzSortFn]="true">File</th>
+        <th nzColumnKey="listened" [nzSortFn]="true">Listened</th>
+        <th nzColumnKey="company" 
+         [nzFilters]="filterCompany" 
+         [nzFilterFn]="true" >Company </th>
+        <th nzColumnKey="action" [nzSortFn]="true">Action</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of oh.data" >
+            <td>{{data.name}}</td>
+            <td>{{data.file}}</td>
+            <td>{{data.listened}}</td>
+            <td>{{data.company}}</td>
+            <td>
+                <a ><button nz-button nzType="default" > <i nz-icon nzType="edit" nzTheme="outline"></i></button></a>
+                <a ><button nz-button nzType="default" nzDanger > <i nz-icon nzType="delete" nzTheme="outline"></i></button></a>
+            </td>
+          </tr>
+      </tbody>
+    </nz-table>
+
+
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <div>
+        <div>
+          <input type="text" nz-input placeholder="Search company" [(ngModel)]="searchValue" />
+          <button nz-button nzSize="small" nzType="primary" (click)="search()">
+            Search
+          </button>
+          <button nz-button nzSize="small" (click)="reset()">Reset</button>
+        </div>
+      </div>
+    </nz-dropdown-menu>
+
+
+</body>
+</html>

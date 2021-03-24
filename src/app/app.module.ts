@@ -17,6 +17,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { DemoNgZorroAntdModule } from './ng-zorro-antd.module';
+import { CandyComponent } from './candy/candy.component';
 
 
 
@@ -26,7 +27,8 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    TabComponent
+    TabComponent,
+    CandyComponent
   ],
   imports: [
     BrowserModule,
