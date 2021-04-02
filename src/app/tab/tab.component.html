@@ -72,7 +72,7 @@
         <td>{{data.company}}</td>
         <td>
             <a ><button nz-button nzType="default" (click)="showModalTwo(data)" > <i nz-icon nzType="edit" nzTheme="outline"></i></button></a>
-            <a ><button nz-button nzType="default" (click)="deleteCandy(data.id)" nzDanger > <i nz-icon nzType="delete" nzTheme="outline"></i></button></a>
+            <a ><button nz-button nzType="default" (click)="deleteNotDelete(data)" nzDanger > <i nz-icon nzType="delete" nzTheme="outline"></i></button></a>
         </td>
       </tr>
     </tbody>
@@ -80,19 +80,30 @@
 
 
 
+  <!-- <nz-upload nzAction="http://localhost:8080/api/candy/multipart" [nzFileList]="fileList">
+    <button nz-button><i nz-icon nzType="upload"></i>Upload</button>
+  </nz-upload> -->
 
 
 
 
-  <nz-modal [(nzVisible)]="isVisible" nzTitle="Add Candy" (nzOnCancel)="handleCancel()" (nzOnOk)="addCandy(newName, newFile, newCompany)">
+
+
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Add/Edit Candy" (nzOnCancel)="handleCancel()" (nzOnOk)="addORedit()">
     <ng-container *nzModalContent>
-      <p>bla-bla</p>
       <input type="text" nz-input placeholder="input name"  [(ngModel)]="newName" /> <br><br>
-      <input type="text" nz-input placeholder="input file(!)"  [(ngModel)]="newFile" /> <br><br>
-      Listened = 0 <br><br>
+      <nz-upload
+      nzAction="http://localhost:8080/api/candy/multipart"
+      [nzHeaders]="{ authorization: 'authorization-text' }"
+      (nzChange)="handleChange($event)">
+      <button nz-button><i nz-icon nzType="upload"></i>Upload file</button>
+    </nz-upload><br><br>
+      <!-- <input type="text" nz-input placeholder="Добавляй, не добавляй, может, дело в с"  [(ngModel)]="newFile" /> <br><br> -->
+      Listened = {{forNoEditListened}} <br><br>
       <nz-radio-group [(ngModel)]="newCompany" nzButtonStyle="solid">
         <label nz-radio-button nzValue="VS">VS</label>
         <label nz-radio-button nzValue="CP">CP</label>
+        <!-- <label nz-radio-button nzValue="OMG">OMG</label> -->
       </nz-radio-group> <br><br>
 
       <!-- <button nz-button nzType="default" (click)="addCandy()" class="bun"> Добавить пользователя </button> -->
@@ -101,17 +112,9 @@
 
 
 
-  <nz-modal [(nzVisible)]="isVisibleTwo" nzTitle="Edit Candy" (nzOnCancel)="handleCancel()" (nzOnOk)="editCandy(forEditId, newNameTwo, newFileTwo, forNoEditListened, newCompanyTwo)">
+  <nz-modal [(nzVisible)]="isVisibleTwo" nzTitle="Delete Candy" (nzOnCancel)="handleCancel()" (nzOnOk)="deleteCandy(forDeleteId)">
     <ng-container *nzModalContent>
-      <p>bla-bla</p>
-      <input type="text" nz-input placeholder="input new name" [(ngModel)]="newNameTwo" /> <br><br>
-      <input type="text" nz-input placeholder="input new file(!)"  [(ngModel)]="newFileTwo" /> <br><br>
-      Listened = {{forNoEditListened}} <br><br>
-      <nz-radio-group [(ngModel)]="newCompanyTwo" nzButtonStyle="solid">
-        <label nz-radio-button nzValue="VS">VS</label>
-        <label nz-radio-button nzValue="CP">CP</label>
-      </nz-radio-group> <br><br>
-
+      <p>Do you want delete?</p>
     </ng-container>
   </nz-modal>
 
